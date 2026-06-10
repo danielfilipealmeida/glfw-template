@@ -4,6 +4,9 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
+#include "ui/ui.hpp"
+
+
 /**
  * @brief The App struct represents the main application and contains the necessary information and functions to initialize, run, and terminate the application.
  */
@@ -11,6 +14,8 @@ struct App {
     std::string appName;
     GLFWwindow* window;
     unsigned int width, height;
+
+    UI ui;
 
     /**
      * @brief Initialize the window with the provided title and dimensions
