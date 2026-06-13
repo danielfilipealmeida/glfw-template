@@ -4,6 +4,8 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "../state.hpp"
+
 struct UI {
 
     float mainScale = 1.0f;
@@ -26,10 +28,17 @@ struct UI {
      * Renders the UI elements. This function should be called every frame to update and display the UI.
      * It handles the rendering of all UI components and ensures that they are displayed correctly on the screen.
      */
-    void render();
+    void render(State& state);
 
     /**
      * Draws the UI elements. This function is responsible for the actual drawing of the UI components on the screen.
      */
     void draw();
+
+    /**
+     * Displays a popup message with the given title and message content.
+     * @param title The title of the popup window.
+     * @param message The message content to be displayed in the popup.
+     */
+    void showPopup(const char* title, const char* message);
 };

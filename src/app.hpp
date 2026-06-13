@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "ui/ui.hpp"
+#include "state.hpp"
 
 
 /**
@@ -16,6 +17,7 @@ struct App {
     unsigned int width, height;
 
     UI ui;
+    State state;
 
     /**
      * @brief Initialize the window with the provided title and dimensions

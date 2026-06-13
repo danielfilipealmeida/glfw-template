@@ -8,16 +8,6 @@ set(DEST_STATIC_DIR ${CMAKE_CURRENT_BINARY_DIR}/static)
 cmake_minimum_required(VERSION 3.18) # Bump minimum version for modern commands
 project(${PROJECT_NAME})
 
-# Fetch spdlog dependency
-include(FetchContent)
-FetchContent_Declare(
-    spdlog_dependency
-    GIT_REPOSITORY "https://github.com/gabime/spdlog" # Placeholder URL
-    GIT_TAG "v1.17.0" # Specific tag/version
-    SOURCE_DIR ${CMAKE_BINARY_DIR}/spdlog
-)
-FetchContent_MakeAvailable(spdlog_dependency)
-
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
@@ -51,7 +41,8 @@ include_directories(${IMGUI_PATH})
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(PkgConfig REQUIRED)
-#pkg_search_module(GLFW REQUIRED glfw3)
+find_package(spdlog REQUIRED)
+find_package(nlohmann_json REQUIRED)
 include_directories(${GLFW_INCLUDE_DIRS})
 link_directories(${GLFW_LIBRARY_DIRS})
 
@@ -60,18 +51,24 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/app.cpp
     src/ui/ui.cpp
+    src/state.cpp
     )
 
 # Link Libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     OpenGL::GL 
     glfw 
+    nlohmann_json::nlohmann_json
     spdlog::spdlog 
     imgui
 )
 
 # Enable OpenGL support
-target_compile_definitions(${PROJECT_NAME} PRIVATE FORCE_OPENGL)
+target_compile_definitions(
+  ${PROJECT_NAME} 
+  PRIVATE FORCE_OPENGL
+  GL_SILENCE_DEPRECATION
+)
 
 # Copy static files after build
 add_custom_command(

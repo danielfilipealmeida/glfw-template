@@ -65,6 +65,17 @@ void App::init(
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
+    try {
+        state.loadFromFile("state.json");
+        spdlog::info("State loaded from state.json");
+    }
+    catch (const std::exception& e) {
+        spdlog::warn("Could not load state from state.json: {}. Using default values.", e.what());
+        // Set default values if loading fails
+        state.floatValue = 0.0f;
+        state.stringValue = "Hello, World!";
+    }
+    
     ui.init(window, main_scale, glsl_version);
 }
 
@@ -80,7 +91,7 @@ void App::run() {
         glfwMakeContextCurrent(window);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        ui.render();
+        ui.render(state);
         ui.draw();
 
         // Swap buffers and poll events
